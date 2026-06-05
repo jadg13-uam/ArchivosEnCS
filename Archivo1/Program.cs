@@ -3,6 +3,7 @@
 using System.Runtime;
 
 Estudiante[] estudiantes = new Estudiante[10];
+int i = 0;
 
 int menu()
 {
@@ -12,27 +13,34 @@ int menu()
     Console.WriteLine("4. Salir");
     Console.Write("Digita tu opcion: ");
     return int.Parse(Console.ReadLine());
-    
+
 }
 
-void pedirDatos() {
-    for (int i = 0; i < 10; i++)
+void pedirDatos()
+{
+    if (i < 10)
     {
-        Console.WriteLine($"Registo # {i+1} de 10");
+        Console.WriteLine($"Registo # {i + 1} de 10");
         Console.Write("Nombre: ");
         estudiantes[i].nombre = Console.ReadLine();
         Console.Write("Carrera: ");
         estudiantes[i].carrera = Console.ReadLine();
         Console.Write("Promedio: ");
         estudiantes[i].promedio = Double.Parse(Console.ReadLine());
+        i++;
+    }
+    else
+    {
+        Console.WriteLine("No hay espacio.");
     }
 }
 
 void mostrarDatos()
 {
-    for(int i = 0; i < 10; i++)
+    for (int cont = 0; cont < i; cont++)
     {
-        Console.WriteLine($"{estudiantes[i].nombre} | {estudiantes[i].carrera} | {estudiantes[i].promedio}");
+        Console.WriteLine($"Estudiante #: {cont+1}");
+        Console.WriteLine($"{estudiantes[cont].nombre} | {estudiantes[cont].carrera} | {estudiantes[cont].promedio}");
     }
 }
 
@@ -47,15 +55,31 @@ void guardarArchivo()
     Console.WriteLine("Registro guardado.");
 }
 
+void leerArchivo()
+{
+    StreamReader archivo = new StreamReader("C:\\xe\\registro.csv");
+    String linea;
+    while ((linea = archivo.ReadLine()) != null && i < 10)
+    {
+        String[] dato = linea.Split(';');
+        estudiantes[i].nombre = dato[0];
+        estudiantes[i].carrera = dato[1];
+        estudiantes[i].promedio = Double.Parse(dato[2]);
+        i++;
+    }
+    archivo.Close();
+}
+
 void main()
 {
     int op;
+    leerArchivo();
     do
     {
         op = menu();
         switch (op)
         {
-            case 1: 
+            case 1:
                 pedirDatos();
                 break;
             case 2:
